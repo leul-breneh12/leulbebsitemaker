@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>Leul advanced Webmaker</title>
+  <!-- Font Awesome 6 (free) for crisp icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Font Inter for modern typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,300&display=swap" rel="stylesheet">
+  <style>
+    /* -------------------- RESET & GLOBAL -------------------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: #0a0c15;
+      color: #f0f3ff;
+      line-height: 1.5;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* custom scrollbar */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #13182b; }
+    ::-webkit-scrollbar-thumb { background: #3f48b0; border-radius: 20px; border: 2px solid #1f2560; }
+    ::-webkit-scrollbar-thumb:hover { background: #5f6cff; }
+
+    /* animated gradient orbs in background */
+    .orb {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.3;
+      z-index: -1;
+      animation: orbFloat 25s infinite alternate ease-in-out;
+    }
+
+    .orb1 {
+      background: #4f46e5;
+      top: -200px;
+      left: -150px;
+      animation-duration: 30s;
+    }
+    .orb2 {
+      background: #c084fc;
+      bottom: -250px;
+      right: -100px;
+      width: 600px;
+      height: 600px;
+      animation-duration: 35s;
+      animation-delay: -5s;
+    }
+    .orb3 {
+      background: #2563eb;
+      top: 40%;
+      left: 60%;
+      width: 400px;
+      height: 400px;
+      animation-duration: 40s;
+    }
+
+    @keyframes orbFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(80px, -60px) scale(1.3); }
+    }
+
+    /* floating particles (generated via JS, but styled here) */
+    .particle {
+      position: fixed;
+      background: rgba(160, 180, 255, 0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -1;
+      animation: particleMove 18s infinite linear;
+    }
+
+    @keyframes particleMove {
+      0% { transform: translateY(10vh) translateX(0) scale(0.8); opacity: 0; }
+      20% { opacity: 0.7; }
+      80% { opacity: 0.4; }
+      100% { transform: translateY(-120vh) translateX(30vw) scale(1.5); opacity: 0; }
+    }
+
+    /* main container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 2rem 3rem;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* -------------------- HEADER / NAV (animated) -------------------- */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem 2rem;
+      padding: 1.2rem 2rem;
+      background: rgba(10, 15, 30, 0.5);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 80px;
+      border: 1px solid rgba(120, 140, 255, 0.2);
+      margin-bottom: 4rem;
+      box-shadow: 0 20px 40px -15px #00000080, 0 0 0 1px #2f3ab0 inset;
+      animation: navGlow 6s infinite alternate;
+    }
+
+    @keyframes navGlow {
+      0% { box-shadow: 0 20px 40px -15px #000, 0 0 0 1px #3945c7 inset; }
+      100% { box-shadow: 0 20px 60px -10px #4f46e5, 0 0 0 2px #7a87ff inset; }
+    }
+
+    .logo {
+      font-size: 2.3rem;
+      font-weight: 800;
+      background: linear-gradient(130deg, #ffffff, #c7d2fe, #a5b4fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 15px #3f48b0);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #e0e7ff;
+      font-weight: 550;
+      font-size: 1.2rem;
+      transition: 0.3s;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 4px;
+    }
+
+    .nav-links a:hover {
+      color: white;
+      border-bottom-color: #7a87ff;
+      transform: translateY(-3px);
+      text-shadow: 0 0 10px #a5b1ff;
+    }
+
+    /* -------------------- HERO SECTION (advanced) -------------------- */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 3rem 1rem 5rem;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 30%, #2d3690, transparent 70%);
+      opacity: 0.3;
+      z-index: -1;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 12vw, 6rem);
+      font-weight: 800;
+      line-height: 1.1;
+      background: linear-gradient(145deg, #ffffff, #bdd3ff, #a5b4fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px #3f48b0);
+      animation: titleGlitch 5s infinite;
+    }
+
+    @keyframes titleGlitch {
+      0%, 100% { transform: skew(0deg, 0deg); opacity: 1; text-shadow: 0 0 20px #4f46e5; }
+      95% { transform: skew(0.5deg, 0.2deg); text-shadow: 3px 0 0 #ff00c1, -3px 0 0 #00ffea; }
+      96% { transform: skew(-0.5deg, -0.1deg); }
+      97% { transform: skew(0deg, 0deg); }
+    }
+
+    .hero-sub {
+      font-size: 1.6rem;
+      color: #b1c3ff;
+      margin-top: 1rem;
+      max-width: 700px;
+      backdrop-filter: blur(4px);
+      padding: 0.5rem 2rem;
+      border-radius: 60px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid #3c45b0;
+      animation: glowPulse 3s infinite;
+    }
+
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 10px #3945c7; }
+      50% { box-shadow: 0 0 30px #6f7cff; }
+      100% { box-shadow: 0 0 10px #3945c7; }
+    }
+
+    /* CTA button with 3D effect */
+    .cta-btn {
+      margin-top: 2.5rem;
+      background: linear-gradient(145deg, #1f2770, #3945c7);
+      border: none;
+      padding: 1.2rem 3.5rem;
+      border-radius: 70px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 25px 35px -10px #000d66, 0 0 0 1px #a5b1ff inset;
+      transform-style: preserve-3d;
+      transform: perspective(800px) rotateX(2deg) rotateY(0deg);
+    }
+
+    .cta-btn:hover {
+      transform: perspective(800px) rotateX(0deg) translateY(-8px) scale(1.05);
+      box-shadow: 0 35px 55px -8px #1e2990, 0 0 0 2px #ffffff inset;
+      background: linear-gradient(145deg, #2a33a0, #4f5cff);
+    }
+
+    /* -------------------- SERVICES SECTION (3D cards) -------------------- */
+    .section-title {
+      font-size: 3.2rem;
+      font-weight: 700;
+      margin: 5rem 0 3rem;
+      background: linear-gradient(145deg, #d9e2ff, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: inline-block;
+      border-left: 8px solid #5f6cff;
+      padding-left: 2rem;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .service-card {
+      background: rgba(15, 20, 40, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 2.8rem;
+      padding: 2.8rem 2rem;
+      border: 1px solid rgba(255,255,255,0.03);
+      transition: all 0.5s cubic-bezier(0.2,0.9,0.3,1.2);
+      box-shadow: 0 30px 50px -25px #030614;
+      transform: translateY(0) rotate(0deg);
+      animation: cardFloat 8s infinite alternate;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, #5f6cff, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
+    .service-card:hover::before {
+      opacity: 0.2;
+    }
+
+    .service-card:hover {
+      transform: translateY(-20px) scale(1.02);
+      background: rgba(30, 35, 65, 0.8);
+      border-color: #7a87ff;
+      box-shadow: 0 50px 70px -15px #1f2990;
+    }
+
+    @keyframes cardFloat {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-12px); }
+    }
+
+    .card-icon {
+      font-size: 4rem;
+      color: #a5b4fc;
+      margin-bottom: 1.5rem;
+      transition: 0.3s;
+    }
+
+    .service-card:hover .card-icon {
+      transform: scale(1.2) rotate(5deg);
+      color: white;
+    }
+
+    .card-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+    }
+
+    .card-desc {
+      color: #cbd5ff;
+      font-size: 1.1rem;
+    }
+
+    /* -------------------- PORTFOLIO (hover zoom + glow) -------------------- */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .portfolio-item {
+      border-radius: 2rem;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 1 / 1.2;
+      background: #1a1f45;
+      box-shadow: 0 20px 30px -10px #000;
+      transition: 0.4s;
+      cursor: pointer;
+    }
+
+    .portfolio-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: 0.6s;
+      filter: grayscale(40%) brightness(0.7);
+    }
+
+    .portfolio-item:hover img {
+      transform: scale(1.1);
+      filter: grayscale(0%) brightness(1);
+    }
+
+    .portfolio-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, #0d0f2c, transparent);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 2rem;
+      opacity: 0;
+      transition: 0.4s;
+    }
+
+    .portfolio-item:hover .portfolio-overlay {
+      opacity: 1;
+    }
+
+    .portfolio-overlay h3 {
+      font-size: 1.8rem;
+      color: white;
+      transform: translateY(20px);
+      transition: 0.4s;
+    }
+
+    .portfolio-item:hover .portfolio-overlay h3 {
+      transform: translateY(0);
+    }
+
+    /* -------------------- TEAM / ABOUT (animated) -------------------- */
+    .about-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3rem;
+      background: rgba(0, 3, 20, 0.5);
+      backdrop-filter: blur(10px);
+      border-radius: 3rem;
+      padding: 3rem;
+      margin: 5rem 0;
+      border: 1px solid #3945c7;
+      align-items: center;
+    }
+
+    .about-text {
+      flex: 2;
+      min-width: 300px;
+    }
+
+    .about-text h2 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-text p {
+      font-size: 1.3rem;
+      color: #cbd5ff;
+    }
+
+    .about-stats {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 4rem;
+      font-weight: 800;
+      background: linear-gradient(145deg, #ffffff, #9db4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: countPulse 2s infinite alternate;
+    }
+
+    @keyframes countPulse {
+      0% { text-shadow: 0 0 10px #3f48b0; }
+      100% { text-shadow: 0 0 30px #7a87ff; }
+    }
+
+    /* -------------------- CONTACT SECTION (with live Telegram/WhatsApp) -------------------- */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin: 4rem 0;
+    }
+
+    .contact-card {
+      background: rgba(10, 13, 40, 0.6);
+      backdrop-filter: blur(12px);
+      border-radius: 2.5rem;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      border: 1px solid #2f3ab0;
+      transition: 0.4s;
+      box-shadow: 0 20px 30px -10px #000;
+      animation: cardGlow 5s infinite alternate;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-15px) scale(1.05);
+      background: #1c235b;
+      border-color: #a5b1ff;
+      box-shadow: 0 40px 50px -8px #3945c7;
+    }
+
+    @keyframes cardGlow {
+      0% { box-shadow: 0 20px 30px -10px #000, 0 0 0 1px #2f3ab0 inset; }
+      100% { box-shadow: 0 20px 40px -5px #4f46e5, 0 0 0 2px #a7b2ff inset; }
+    }
+
+    .contact-icon {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 0 15px currentColor);
+      transition: 0.3s;
+    }
+
+    .contact-card:hover .contact-icon {
+      transform: rotate(360deg) scale(1.1);
+    }
+
+    .contact-card h3 {
+      font-size: 2rem;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-card p {
+      color: #b5c6ff;
+      font-size: 1.2rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .contact-link {
+      display: inline-block;
+      background: #1f2770;
+      color: white;
+      text-decoration: none;
+      padding: 0.9rem 2.2rem;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      transition: 0.3s;
+      border: 1px solid transparent;
+    }
+
+    .contact-link:hover {
+      background: #2d3690;
+      border-color: white;
+      box-shadow: 0 0 25px #6f7cff;
+      transform: scale(1.05);
+    }
+
+    /* footer */
+    .footer {
+      margin-top: 5rem;
+      text-align: center;
+      padding: 2rem;
+      border-top: 2px solid #2a3480;
+      color: #99a6ff;
+      font-size: 1.1rem;
+    }
+
+    /* responsive */
+    @media (max-width: 600px) {
+      .navbar {
+        border-radius: 30px;
+        padding: 1rem 1.5rem;
+      }
+      .hero-title {
+        font-size: 3.5rem;
+      }
+      .section-title {
+        font-size: 2.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- floating orbs -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <div class="container">
+    <!-- navigation -->
+    <nav class="navbar">
+      <div class="logo">leul webmaker <span style="font-size:1rem; color:#b3c0ff;">✦ advanced</span></div>
+      <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#services">Services</a>
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+
+    <!-- hero -->
+    <section class="hero">
+      <h1 class="hero-title">ful .stack. <br> developer.</h1>
+      <p class="hero-sub">advanced websits• 3d effects • etc </p>
+      <button class="cta-btn"><i class="fas fa-magic"></i> start a project</button>
+    </section>
+
+    <!-- services section -->
+    <h2 id="services" class="section-title"><i class="fas fa-cube"></i> services that move</h2>
+    <div class="cards-grid">
+      <div class="service-card">
+        <i class="fas fa-paint-brush card-icon"></i>
+        <h3 class="card-title">design</h3>
+        <p class="card-desc">Fully responsive layouts with micro‑interactions, glassmorphism, and neon accents.</p>
+      </div>
+      <div class="service-card">
+        <i class="fas fa-code card-icon"></i>
+        <h3 class="card-title">development</h3>
+        <p class="card-desc">Clean HTML ,CSS, JavaScript, advanced keyframe animations, 3D transforms, and smooth transitions.</p>
+      </div>
+      <div class="service-card">
+        <i class="fas fa-rocket card-icon"></i>
+        <h3 class="card-title">performance</h3>
+        <p class="card-desc">Optimized for all devices, fast loading, and butter‑smooth 60fps animations.</p>
+      </div>
+    </div>
+
+    <!-- portfolio / work section -->
+    <h2 id="work" class="section-title"><i class="fas fa-eye"></i> recent projects</h2>
+    <div class="portfolio-grid">
+      <div class="portfolio-item">
+        <img src="https://picsum.photos/600/800?random=1" alt="project 1">
+        <div class="portfolio-overlay"><h3>neon dashboard</h3></div>
+      </div>
+      <div class="portfolio-item">
+        <img src="https://picsum.photos/600/800?random=2" alt="project 2">
+        <div class="portfolio-overlay"><h3>3d card studio</h3></div>
+      </div>
+      <div class="portfolio-item">
+        <img src="https://picsum.photos/600/800?random=3" alt="project 3">
+        <div class="portfolio-overlay"><h3>glassmorphic app</h3></div>
+      </div>
+      <div class="portfolio-item">
+        <img src="https://picsum.photos/600/800?random=4" alt="project 4">
+        <div class="portfolio-overlay"><h3>motion gallery</h3></div>
+      </div>
+    </div>
+
+    <!-- about / stats -->
+    <div id="about" class="about-section">
+      <div class="about-text">
+        <h2><i class="fas fa-user-astronaut"></i> about leul webmaker</h2>
+        <p>We craft powerful digital experiences using nothing but advanced CSS and a pinch of JavaScript. Every animation is hand‑crafted for that wow factor — on mobile and desktop.</p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-item">
+          <div class="stat-number">12+</div>
+          <div>projects delivered</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">5%</div>
+          <div>early discount</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- contact section with live Telegram & WhatsApp (USER PROVIDED) -->
+    <h2 id="contact" class="section-title"><i class="fas fa-paper-plane"></i> let's connect</h2>
+    <div class="contact-grid">
+      <!-- Telegram card (LIVE) -->
+      <div class="contact-card">
+        <i class="fab fa-telegram-plane contact-icon" style="color: #0088cc;"></i>
+        <h3>Telegram</h3>
+        <p>@coder_leul</p>
+        <a href="https://t.me/coder_leul" class="contact-link" target="_blank" rel="noopener"><i class="fab fa-telegram"></i> message</a>
+      </div>
+      <!-- WhatsApp card (LIVE) -->
+      <div class="contact-card">
+        <i class="fab fa-whatsapp contact-icon" style="color: #25D366;"></i>
+        <h3>WhatsApp</h3>
+        <p>+251 967113279</p>
+        <a href="https://wa.me/251967113279" class="contact-link" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> chat</a>
+      </div>
+
+    <!-- footer -->
+    <footer class="footer">
+      <p>✨ 5% welcome discount · instant & normal options · 50% upfront ✨</p>
+      <p style="margin-top: 1rem;">© 2026 leul webmaker — advanced website</p>
+    </footer>
+  </div>
+
+  <!-- particle generator (more advanced feel) -->
+  <script>
+    (function() {
+      // generate floating particles
+      for (let i = 0; i < 35; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.floor(Math.random() * 14 + 4);
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.top = Math.random() * 100 + '%';
+        p.style.animationDelay = Math.random() * 15 + 's';
+        p.style.animationDuration = (Math.random() * 20 + 15) + 's';
+        p.style.background = `rgba(${150 + Math.random()*100}, ${160 + Math.random()*80}, 255, ${0.3+Math.random()*0.3})`;
+        document.body.appendChild(p);
+      }
+
+      // smooth scroll for anchor links
+      document.querySelectorAll('.nav-links a, .cta-btn').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href && href.startsWith('#')) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
